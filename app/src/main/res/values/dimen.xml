@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="h1">20sp</dimen>
+    <dimen name="h2">18sp</dimen>
+    <dimen name="h3">14sp</dimen>
+    <dimen name="margin">15dp</dimen>
+    <dimen name="markerWidth">35dp</dimen>
+    <dimen name="markerHeight">35dp</dimen>
+    <dimen name="markerPadding">1dp</dimen>
+    <dimen name="marketTextImage">15dp</dimen>
+</resources>

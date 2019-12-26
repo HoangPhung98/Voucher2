@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "632523060433",
+    "firebase_url": "https://voucher2-2b294.firebaseio.com",
+    "project_id": "voucher2-2b294",
+    "storage_bucket": "voucher2-2b294.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632523060433:android:f802783b5db78cd7e281f0",
+        "android_client_info": {
+          "package_name": "com.kingphung.voucher2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "632523060433-2n5mrsh8b7tv46be0a8v2ntqk0c9h2h2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kingphung.voucher2",
+            "certificate_hash": "8aded3cb8d9aee7be896d48842f752c52318ae6a"
+          }
+        },
+        {
+          "client_id": "632523060433-n5c4i1j0b4u46mecdgm5k506pc8nmudg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCe_Zk16HtnQNE3Gli-LlJXXOY1XQYebk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "632523060433-n5c4i1j0b4u46mecdgm5k506pc8nmudg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

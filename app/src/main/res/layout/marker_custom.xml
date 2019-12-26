@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ImageView>
+    <com.github.abdularis.civ.AvatarImageView
+        android:id="@+id/ivNum"
+        android:text="5"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/colorText"
+        android:layout_alignBottom="@id/iv"
+        android:layout_alignEnd="@id/iv"
+        android:src="@drawable/coffe"
+        app:textSize="13sp"
+        app:textColor="@color/markerText"
+        android:layout_width="@dimen/marketTextImage"
+        android:layout_height="@dimen/marketTextImage">
+    </com.github.abdularis.civ.AvatarImageView>
+
+</RelativeLayout>
