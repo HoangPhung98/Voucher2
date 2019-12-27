@@ -1,17 +1,25 @@
 package com.kingphung.voucher2.view;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,12 +27,20 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.github.abdularis.civ.AvatarImageView;
+import com.github.abdularis.civ.CircleImageView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,6 +59,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.GeoApiContext;
 import com.google.maps.android.clustering.ClusterManager;
@@ -59,17 +78,22 @@ import com.kingphung.voucher2.presenter.searchVoucher.P_SearchVoucher;
 import com.kingphung.voucher2.ultils.Instant;
 import com.kingphung.voucher2.view.direction.V_I_CalculateDirection;
 import com.kingphung.voucher2.view.fetchListRestaurant.V_I_FetchListRestaurant;
+import com.kingphung.voucher2.view.fragment.ListMyRestaurant;
 import com.kingphung.voucher2.view.searchVoucher.V_I_SearchVoucher;
 import com.kingphung.voucher2.view.showPopupVoucherPager.V_I_ShowPopupVoucherPager;
 import com.kingphung.voucher2.view.showPopupVoucherPager.V_ShowPopupVoucherPager;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity
+public class MapsActivity extends AppCompatActivity
         implements OnMapReadyCallback,
-        View.OnClickListener,
+        SearchView.OnQueryTextListener,
+        NavigationView.OnNavigationItemSelectedListener,
+        ListMyRestaurant.OnFragmentInteractionListener,
         V_I_FetchListRestaurant,
         V_I_ShowPopupVoucherPager,
         V_I_CalculateDirection,
@@ -78,6 +102,8 @@ public class MapsActivity extends FragmentActivity
     private String TAG = "kkkMapsActivity";
 
     //UI
+    DrawerLayout drawerLayout;
+    SearchView searchView;
     ImageButton btExit;
     EditText etSearch;
     private GoogleMap mMap;
@@ -117,47 +143,104 @@ public class MapsActivity extends FragmentActivity
     }
 
     private void initUI() {
-        btExit = findViewById(R.id.btLogout);
-        etSearch = findViewById(R.id.etSearch);
+        //drawer nav
+        drawerLayout = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                        R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        //header drawer nav
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View header = navigationView.inflateHeaderView(R.layout.nav_drawer_header);
+        CircularImageView ivAvatar = header.findViewById(R.id.avatar);
+        TextView tvUserName = header.findViewById(R.id.tvUserName);
+        TextView tvEmail = header.findViewById(R.id.tvEmail);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Picasso.get().load(user.getPhotoUrl()).into(ivAvatar);
+        tvUserName.setText(user.getDisplayName());
+        tvEmail.setText(user.getEmail());
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+//        btExit = findViewById(R.id.btLogout);
+//        etSearch = findViewById(R.id.etSearch);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+        MenuItem menuItem =  menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search here...");
+        searchView.setOnQueryTextListener(this);
+        return  super.onCreateOptionsMenu(menu);
     }
 
     private void setOnClickUI() {
-        btExit.setOnClickListener(this);
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchVoucher(s);
-            }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.nav_myList:
+                handleShowMyList();
+                break;
+            case R.id.nav_logout:
+                handleLogout();
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+    private void handleLogout() {
+        showAlertDialogLogout();
+    }
 
-            }
-        });
+    private void handleShowMyList() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        ListMyRestaurant movieDetail = new ListMyRestaurant();
+        fragmentTransaction.add(R.id.fragment_container, movieDetail);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        searchVoucher(newText);
+        return true;
     }
 
     private void searchVoucher(CharSequence searchWord) {
         P_SearchVoucher p_searchVoucher = new P_SearchVoucher(this, listRestaurant, searchWord);
         p_searchVoucher.search();
     }
+
     @Override
     public void onCompleteSearchVoucher(ArrayList<Resaurant> listRestaurant) {
         drawMakers(listRestaurant);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btLogout:
-                showAlertDialogLogout();
-                break;
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()){
+////            case R.id.btLogout:
+////                showAlertDialogLogout();
+////                break;
+//        }
+//    }
 
     private void showAlertDialogLogout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -438,6 +521,8 @@ public class MapsActivity extends FragmentActivity
         getLocationPermission();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
-
+    }
 }

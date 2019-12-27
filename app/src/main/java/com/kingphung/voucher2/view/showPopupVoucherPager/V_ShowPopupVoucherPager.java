@@ -89,9 +89,10 @@ public class V_ShowPopupVoucherPager implements View.OnClickListener {
     private void mapUI(Resaurant resaurant) {
         tvRestaurantName.setText(resaurant.getName());
         tvNumber.setText(resaurant.getNum_voucher() + "");
-        pagerAdapter = new MyPagerAdapter(context, resaurant.getListVoucher());
+        pagerAdapter = new MyPagerAdapter(context, resaurant);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPadding(130, 0, 130, 0);
+
     }
 
     @Override

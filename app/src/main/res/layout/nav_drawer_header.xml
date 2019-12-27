@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="bottom"
+    android:layout_height="wrap_content">
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/avatar"
+        android:layout_margin="35dp"
+        android:layout_gravity="center"
+        android:layout_width="180dp"
+        android:layout_height="180dp">
+    </com.mikhaellopez.circularimageview.CircularImageView>
+    <TextView
+        android:id="@+id/tvUserName"
+        android:textSize="@dimen/h1"
+        android:textColor="@color/colorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+    <TextView
+        android:textColor="@color/colorText"
+        android:id="@+id/tvEmail"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/h1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+
+</LinearLayout>

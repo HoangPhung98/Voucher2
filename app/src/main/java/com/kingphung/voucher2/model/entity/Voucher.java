@@ -3,8 +3,10 @@ package com.kingphung.voucher2.model.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Voucher implements Parcelable {
+import java.sql.Timestamp;
 
+public class Voucher implements Parcelable {
+    private String id;
     private String code;
     private String title;
     private String description;
@@ -15,6 +17,7 @@ public class Voucher implements Parcelable {
     }
 
     public Voucher(String code, String title, String description, String link, String img_url) {
+        this.id = code+"_"+System.currentTimeMillis();
         this.code = code;
         this.title = title;
         this.description = description;
@@ -24,6 +27,7 @@ public class Voucher implements Parcelable {
 
 
     protected Voucher(Parcel in) {
+        id = in.readString();
         code = in.readString();
         title = in.readString();
         description = in.readString();
@@ -42,6 +46,14 @@ public class Voucher implements Parcelable {
             return new Voucher[size];
         }
     };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
@@ -90,6 +102,7 @@ public class Voucher implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(title);
         dest.writeString(code);
         dest.writeString(description);
