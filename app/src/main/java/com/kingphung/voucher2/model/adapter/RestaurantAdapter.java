@@ -6,18 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kingphung.voucher2.R;
 import com.kingphung.voucher2.model.entity.Resaurant;
+import com.kingphung.voucher2.view.openListVoucherFragment.V_OpenListVoucherFragment;
 
 import java.util.ArrayList;
 
-public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHoler>
-    implements View.OnClickListener {
+public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHoler> {
     Context context;
     ArrayList<Resaurant> listMyRestaurant;
 
@@ -42,17 +41,18 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         holder.tvName.setText(listMyRestaurant.get(position).getName());
         holder.tvAddress.setText(listMyRestaurant.get(position).getAddress());
         holder.tvNum.setText(listMyRestaurant.get(position).getNum_voucher()+"");
-        holder.itemView.setOnClickListener(this);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                V_OpenListVoucherFragment v_openListVoucherFragment = new V_OpenListVoucherFragment(context,listMyRestaurant.get(position));
+                v_openListVoucherFragment.open();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return listMyRestaurant.size();
-    }
-
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(context, "Click Restaurant!", Toast.LENGTH_LONG).show();
     }
 
     public class ViewHoler extends RecyclerView.ViewHolder{

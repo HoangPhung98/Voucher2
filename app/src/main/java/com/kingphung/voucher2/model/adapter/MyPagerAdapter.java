@@ -56,14 +56,16 @@ public class MyPagerAdapter extends PagerAdapter
         layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.item_voucher, container, false);
 
-        TextView tvTitle, tvCode, tvDescription;
+        TextView tvTitle, tvCode, tvAddress, tvDescription;
         ImageView ivImage, ivHeart;
         tvTitle = view.findViewById(R.id.tvTitle);
         tvCode = view.findViewById(R.id.tvCode);
+//        tvAddress = view.findViewById(R.id.tvAddress);
         tvDescription = view.findViewById(R.id.tvDescription);
         ivImage = view.findViewById(R.id.ivImage);
         tvTitle.setText(listVoucher.get(position).getTitle());
         tvCode.setText(listVoucher.get(position).getCode());
+//        tvAddress.setText(resaurant.getAddress());
         tvDescription.setText(listVoucher.get(position).getDescription());
         Picasso.get().load(listVoucher.get(position).getimg_url()).into(ivImage);
         ivHeart = view.findViewById(R.id.ivHeart);

@@ -31,8 +31,20 @@
             android:textSize="@dimen/h1">
         </TextView>
     </LinearLayout>
+    <TextView
+        android:id="@+id/tvRestaurantAddress"
+        android:textSize="@dimen/h3"
+        android:text="so 1 dai co viet"
+        android:textColor="@color/colorText"
+        android:background="@color/colorBackground"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/margin"
+        android:layout_height="wrap_content">
+
+    </TextView>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pagerVoucher"
+        android:background="#CFC8C8"
         android:foregroundGravity="center"
         android:layout_width="match_parent"
         android:overScrollMode="never"

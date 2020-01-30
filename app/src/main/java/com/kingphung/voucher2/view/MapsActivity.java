@@ -79,6 +79,7 @@ import com.kingphung.voucher2.ultils.Instant;
 import com.kingphung.voucher2.view.direction.V_I_CalculateDirection;
 import com.kingphung.voucher2.view.fetchListRestaurant.V_I_FetchListRestaurant;
 import com.kingphung.voucher2.view.fragment.ListMyRestaurant;
+import com.kingphung.voucher2.view.fragment.ListVoucherOfARestaurant;
 import com.kingphung.voucher2.view.searchVoucher.V_I_SearchVoucher;
 import com.kingphung.voucher2.view.showPopupVoucherPager.V_I_ShowPopupVoucherPager;
 import com.kingphung.voucher2.view.showPopupVoucherPager.V_ShowPopupVoucherPager;
@@ -97,7 +98,8 @@ public class MapsActivity extends AppCompatActivity
         V_I_FetchListRestaurant,
         V_I_ShowPopupVoucherPager,
         V_I_CalculateDirection,
-        V_I_SearchVoucher {
+        V_I_SearchVoucher ,
+        ListVoucherOfARestaurant.OnFragmentInteractionListener {
 
     private String TAG = "kkkMapsActivity";
 

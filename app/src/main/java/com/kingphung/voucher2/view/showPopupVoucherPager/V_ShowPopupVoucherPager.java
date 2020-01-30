@@ -25,7 +25,7 @@ public class V_ShowPopupVoucherPager implements View.OnClickListener {
 
     //UI
     PopupWindow popupWindow;
-    TextView tvRestaurantName, tvNumber;
+    TextView tvRestaurantName, tvNumber, tvRestaurantAddress;
     ImageButton btBack, btCar, btBike, btWalk;
     ViewPager viewPager;
     PagerAdapter pagerAdapter;
@@ -55,6 +55,7 @@ public class V_ShowPopupVoucherPager implements View.OnClickListener {
         );
         tvRestaurantName = viewLayoutPopupWindowVoucher.findViewById(R.id.tvRestaurantName);
         tvNumber = viewLayoutPopupWindowVoucher.findViewById(R.id.tvNumberOfVoucher);
+        tvRestaurantAddress = viewLayoutPopupWindowVoucher.findViewById(R.id.tvRestaurantAddress);
 
         viewPager = viewLayoutPopupWindowVoucher.findViewById(R.id.pagerVoucher);
 
@@ -89,6 +90,7 @@ public class V_ShowPopupVoucherPager implements View.OnClickListener {
     private void mapUI(Resaurant resaurant) {
         tvRestaurantName.setText(resaurant.getName());
         tvNumber.setText(resaurant.getNum_voucher() + "");
+        tvRestaurantAddress.setText(resaurant.getAddress());
         pagerAdapter = new MyPagerAdapter(context, resaurant);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPadding(130, 0, 130, 0);

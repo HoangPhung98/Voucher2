@@ -35,65 +35,76 @@ public class M_AddToMyList {
         this.voucher = voucher;
     }
     public void add(){
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Instant.USER_REF);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference myRef = userRef.child(getFilteredEmail(user));
-        DatabaseReference restaurantRef = myRef.child(resaurant.getId());
 
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(getFilteredEmail(user))){
-                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.hasChild(resaurant.getId())){
-                                DatabaseReference thisResRef = myRef.child(resaurant.getId());
-                                thisResRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        Resaurant thisRes =  dataSnapshot.getValue(Resaurant.class);
-                                        updateResWithNewVoucher(thisResRef, thisRes);
-                                    }
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Instant.USER_REF);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            DatabaseReference myRef = userRef.child(getFilteredEmail(user));
+            DatabaseReference restaurantRef = myRef.child(resaurant.getId());
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(getFilteredEmail(user))) {
+                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.hasChild(resaurant.getId())) {
+                                    DatabaseReference thisResRef = myRef.child(resaurant.getId());
+                                    thisResRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            Resaurant thisRes = dataSnapshot.getValue(Resaurant.class);
+                                            updateResWithNewVoucher(thisResRef, thisRes);
+                                        }
 
-                                    }
-                                });
-                            }else{
-                                addNewRestaurant(restaurantRef);
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                } else {
+                                    addNewRestaurant(restaurantRef);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
-                }else{
-                    addFirstRestaurant(restaurantRef);
+                            }
+                        });
+                    } else {
+                        addFirstRestaurant(restaurantRef);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
 //
-
 
         //get num of my voucher
 
 
     }
 
-    private void updateResWithNewVoucher(DatabaseReference thisResRef, Resaurant thisRes) {
-        thisRes.getListVoucher().add(voucher);
-        thisRes.setNum_voucher(thisRes.getNum_voucher()+1);
+    private boolean checkIsThisVoucherInMyList(Resaurant resaurant, Voucher voucher) {
+        for(int i=0; i<resaurant.getListVoucher().size(); i++){
+            if (resaurant.getListVoucher().get(i).getCode().equals(voucher.getCode())){
+                return true;
+            }
+        }
+        return false;
+    }
 
-        thisResRef.setValue(thisRes);
+    private void updateResWithNewVoucher(DatabaseReference thisResRef, Resaurant thisRes) {
+        if(!checkIsThisVoucherInMyList(thisRes, voucher)){
+            thisRes.getListVoucher().add(voucher);
+            thisRes.setNum_voucher(thisRes.getNum_voucher()+1);
+            thisResRef.setValue(thisRes);
+        }
+
     }
 
     private void addNewRestaurant(DatabaseReference restaurantRef) {
